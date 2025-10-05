@@ -1,0 +1,36 @@
+menu "Minimal Oled Configuration"
+
+    choice RESOLUTION
+		prompt "Panel resolution"
+		default RESOLUTION_128X32 if BOARD_BADGE
+		default RESOLUTION_128X64 if BOARD_MININO
+		help
+			Select Panel resolution.
+		config RESOLUTION_128X32
+			bool "128x32 Panel"
+			help
+				Panel is 128x32.
+		config RESOLUTION_128X64
+			bool "128x64 Panel"
+			help
+				Panel is 128x64.
+	endchoice
+
+	choice I2C_PORT
+		depends on I2C_INTERFACE
+		prompt "I2C port that controls this bus"
+		default I2C_PORT_0
+		help
+			Select I2C port that controls this bus.
+		config I2C_PORT_0
+			bool "I2C_PORT_0"
+			help
+				Use I2C_PORT_0.
+		config I2C_PORT_1
+			depends on IDF_TARGET_ESP32 || IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
+			bool "I2C_PORT_1"
+			help
+				Use I2C_PORT_1
+	endchoice
+
+endmenu
