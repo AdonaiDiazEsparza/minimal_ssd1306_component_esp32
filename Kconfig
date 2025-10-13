@@ -33,4 +33,30 @@ menu "Minimal Oled Configuration"
 				Use I2C_PORT_1
 	endchoice
 
+	config SCL_GPIO
+		int "SCL GPIO number"
+		default 22 if IDF_TARGET_ESP32
+		default 12 if IDF_TARGET_ESP32S2
+		default 12 if IDF_TARGET_ESP32S3
+		default 7 if IDF_TARGET_ESP32C6
+		default 9 if IDF_TARGET_ESP32C3
+		default  6 # others
+		help
+			GPIO number (IOxx) to I2C SCL.
+			Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to I2C.
+			GPIOs 35-39 are input-only so cannot be used as outputs.
+
+	config SDA_GPIO
+		int "SDA GPIO number"
+		default 21 if IDF_TARGET_ESP32
+		default 11 if IDF_TARGET_ESP32S2
+		default 11 if IDF_TARGET_ESP32S3
+		default 6 if IDF_TARGET_ESP32C6
+		default 8 if IDF_TARGET_ESP32C3
+		default  5 # others
+		help
+			GPIO number (IOxx) to I2C SDA.
+			Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to I2C.
+			GPIOs 35-39 are input-only so cannot be used as outputs.
+
 endmenu

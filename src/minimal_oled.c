@@ -40,7 +40,7 @@
 #elif CONFIG_I2C_PORT_1
 #define I2C_NUM I2C_NUM_1
 #else
-#define I2C_NUM I2C_NUM_0 // if spi is selected
+#define I2C_NUM I2C_NUM_0 
 #endif
 
 
@@ -90,6 +90,35 @@ uint8_t oled_buf[oled_NUM_PAGES][oled_WIDTH];
 // handle to send the buffer;
 i2c_master_dev_handle_t i2c_dev_handle;
 
+/**
+ * @fn oled_init_i2c
+ * 
+ * @brief Function to init the i2c with the 
+ */
+i2c_master_bus_config_t oled_init_i2c(void){
+    i2c_master_bus_config_t i2c_mst_config = {
+		.clk_source = I2C_CLK_SRC_DEFAULT,
+		.glitch_ignore_cnt = 7,
+		.i2c_port = I2C_NUM,
+		.scl_io_num = CONFIG_SCL_GPIO,
+		.sda_io_num = CONFIG_SDA_GPIO,
+		.flags.enable_internal_pullup = true,
+	};
+	i2c_master_bus_handle_t i2c_bus_handle;
+	ESP_ERROR_CHECK(i2c_new_master_bus(&i2c_mst_config, &i2c_bus_handle));
+
+	i2c_device_config_t dev_cfg = {
+		.dev_addr_length = I2C_ADDR_BIT_LEN_7,
+		.device_address = oled_ADDR,
+		.scl_speed_hz = I2C_MASTER_FREQ_HZ,
+	};
+
+	ESP_ERROR_CHECK(i2c_master_bus_add_device(i2c_bus_handle, &dev_cfg, &i2c_dev_handle));
+
+    oled_init(i2c_bus_handle);
+
+    return i2c_mst_config;
+}
 
 /**
  * @fn oled_init
