@@ -8,6 +8,7 @@
 extern C {
 #endif
 
+i2c_master_bus_config_t oled_init_i2c(void);
 void oled_init(i2c_master_bus_handle_t i2c_bus_handle);
 void oled_set_position(uint8_t x, uint8_t y);
 void oled_flush(void);
