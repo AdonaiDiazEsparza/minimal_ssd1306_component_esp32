@@ -8,32 +8,32 @@
 #define I2C_TICKS_TO_WAIT 100
 
 // oled definitions
-#define oled_ADDR         0x3C    // oled write address (0x3C << 1)
-#define oled_CMD_MODE     0x00    // set command mode
-#define oled_DAT_MODE     0x40    // set data mode
+#define OLED_ADDR         0x3C    // oled write address (0x3C << 1)
+#define OLED_CMD_MODE     0x00    // set command mode
+#define OLED_DAT_MODE     0x40    // set data mode
 
 // oled commands
-#define oled_COLUMN_LOW   0x00    // set lower 4 bits of start column (0x00 - 0x0F)
-#define oled_COLUMN_HIGH  0x10    // set higher 4 bits of start column (0x10 - 0x1F)
-#define oled_MEMORYMODE   0x20    // set memory addressing mode (following byte)
-#define oled_COLUMNS      0x21    // set start and end column (following 2 bytes)
-#define oled_PAGES        0x22    // set start and end page (following 2 bytes)
-#define oled_SCROLL_OFF   0x2E    // deactivate scroll command
-#define oled_STARTLINE    0x40    // set display start line (0x40-0x7F = 0-63)
-#define oled_CONTRAST     0x81    // set display contrast (following byte)
-#define oled_CHARGEPUMP   0x8D    // (following byte - 0x14:enable, 0x10: disable)
-#define oled_XFLIP_OFF    0xA0    // don't flip display horizontally
-#define oled_XFLIP        0xA1    // flip display horizontally
-#define oled_INVERT_OFF   0xA6    // set non-inverted display
-#define oled_INVERT       0xA7    // set inverse display
-#define oled_MULTIPLEX    0xA8    // set multiplex ratio (following byte)
-#define oled_DISPLAY_OFF  0xAE    // set display off (sleep mode)
-#define oled_DISPLAY_ON   0xAF    // set display on
-#define oled_PAGE         0xB0    // set start page (following byte)
-#define oled_YFLIP_OFF    0xC0    // don't flip display vertically
-#define oled_YFLIP        0xC8    // flip display vertically
-#define oled_OFFSET       0xD3    // set display offset (y-scroll: following byte)
-#define oled_COMPINS      0xDA    // set COM pin config (following byte)
+#define OLED_COLUMN_LOW   0x00    // set lower 4 bits of start column (0x00 - 0x0F)
+#define OLED_COLUMN_HIGH  0x10    // set higher 4 bits of start column (0x10 - 0x1F)
+#define OLED_MEMORYMODE   0x20    // set memory addressing mode (following byte)
+#define OLED_COLUMNS      0x21    // set start and end column (following 2 bytes)
+#define OLED_PAGES        0x22    // set start and end page (following 2 bytes)
+#define OLED_SCROLL_OFF   0x2E    // deactivate scroll command
+#define OLED_STARTLINE    0x40    // set display start line (0x40-0x7F = 0-63)
+#define OLED_CONTRAST     0x81    // set display contrast (following byte)
+#define OLED_CHARGEPUMP   0x8D    // (following byte - 0x14:enable, 0x10: disable)
+#define OLED_XFLIP_OFF    0xA0    // don't flip display horizontally
+#define OLED_XFLIP        0xA1    // flip display horizontally
+#define OLED_INVERT_OFF   0xA6    // set non-inverted display
+#define OLED_INVERT       0xA7    // set inverse display
+#define OLED_MULTIPLEX    0xA8    // set multiplex ratio (following byte)
+#define OLED_DISPLAY_OFF  0xAE    // set display off (sleep mode)
+#define OLED_DISPLAY_ON   0xAF    // set display on
+#define OLED_PAGE         0xB0    // set start page (following byte)
+#define OLED_YFLIP_OFF    0xC0    // don't flip display vertically
+#define OLED_YFLIP        0xC8    // flip display vertically
+#define OLED_OFFSET       0xD3    // set display offset (y-scroll: following byte)
+#define OLED_COMPINS      0xDA    // set COM pin config (following byte)
 
 #if CONFIG_I2C_PORT_0
 #define I2C_NUM I2C_NUM_0
@@ -46,46 +46,44 @@
 
 #ifdef CONFIG_RESOLUTION_128X64
 
-#define oled_HEIGHT 64
+#define OLED_HEIGHT 64
 
 // oled initialisation sequence
-const uint8_t oled_INIT_CMD[] = {
-    oled_CMD_MODE,
-    oled_MULTIPLEX,   0x3F,                 // set multiplex ratio  
-    oled_CHARGEPUMP,  0x14,                 // set DC-DC enable  
-    oled_MEMORYMODE,  0x00,                 // set horizontal addressing mode
-    oled_COLUMNS,     0x00, 0x7F,           // set start and end column
-    oled_PAGES,       0x00, 0x3F,           // set start and end page
-    oled_COMPINS,     0x12,                 // set com pins
-    oled_XFLIP, oled_YFLIP,                 // flip screen
-    oled_DISPLAY_ON                         // display on
+const uint8_t OLED_INIT_CMD[] = {
+    OLED_CMD_MODE,
+    OLED_MULTIPLEX,   0x3F,                 // set multiplex ratio  
+    OLED_CHARGEPUMP,  0x14,                 // set DC-DC enable  
+    OLED_MEMORYMODE,  0x00,                 // set horizontal addressing mode
+    OLED_COLUMNS,     0x00, 0x7F,           // set start and end column
+    OLED_PAGES,       0x00, 0x3F,           // set start and end page
+    OLED_COMPINS,     0x12,                 // set com pins
+    OLED_XFLIP, OLED_YFLIP,                 // flip screen
+    OLED_DISPLAY_ON                         // display on
 };
 
 #else
 
-#define oled_HEIGHT 32
+#define OLED_HEIGHT 32
 
-const uint8_t oled_INIT_CMD[] = {
-    oled_CMD_MODE,
-    oled_MULTIPLEX,   0x1F,                 // set multiplex ratio  
-    oled_CHARGEPUMP,  0x14,                 // set DC-DC enable  
-    oled_MEMORYMODE,  0x00,                 // set horizontal addressing mode
-    oled_COLUMNS,     0x00, 0x7F,           // set start and end column
-    oled_PAGES,       0x00, 0x1F,           // set start and end page
-    oled_COMPINS,     0x02,                 // set com pins
-    oled_XFLIP, oled_YFLIP,                 // flip screen
-    oled_DISPLAY_ON                         // display on
+const uint8_t OLED_INIT_CMD[] = {
+    OLED_CMD_MODE,
+    OLED_MULTIPLEX,   0x1F,                 // set multiplex ratio  
+    OLED_CHARGEPUMP,  0x14,                 // set DC-DC enable  
+    OLED_MEMORYMODE,  0x00,                 // set horizontal addressing mode
+    OLED_COLUMNS,     0x00, 0x7F,           // set start and end column
+    OLED_PAGES,       0x00, 0x1F,           // set start and end page
+    OLED_COMPINS,     0x02,                 // set com pins
+    OLED_XFLIP, OLED_YFLIP,                 // flip screen
+    OLED_DISPLAY_ON                         // display on
 };
 
 #endif
 
-#define oled_WIDTH 128
-#define oled_NUM_PAGES (oled_HEIGHT / 8)
-
-// #define oled_SCREEN_BUFFER_SIZE (oled_WIDTH*oled_NUM_PAGES)
+#define OLED_WIDTH 128
+#define OLED_NUM_PAGES (OLED_HEIGHT / 8)
 
 // Buffer for the oled
-uint8_t oled_buf[oled_NUM_PAGES][oled_WIDTH];
+uint8_t oled_buf[OLED_NUM_PAGES][OLED_WIDTH];
 
 // handle to send the buffer;
 i2c_master_dev_handle_t i2c_dev_handle;
@@ -109,7 +107,7 @@ i2c_master_bus_config_t oled_init_i2c(void){
 
 	i2c_device_config_t dev_cfg = {
 		.dev_addr_length = I2C_ADDR_BIT_LEN_7,
-		.device_address = oled_ADDR,
+		.device_address = OLED_ADDR,
 		.scl_speed_hz = I2C_MASTER_FREQ_HZ,
 	};
 
@@ -133,14 +131,14 @@ void oled_init(i2c_master_bus_handle_t i2c_bus_handle)
     // First define the device and frequency
     i2c_device_config_t dev_cfg = {
 		.dev_addr_length = I2C_ADDR_BIT_LEN_7,
-		.device_address = oled_ADDR,
+		.device_address = OLED_ADDR,
 		.scl_speed_hz = I2C_MASTER_FREQ_HZ,
 	};
 
 	ESP_ERROR_CHECK(i2c_master_bus_add_device(i2c_bus_handle, &dev_cfg, &i2c_dev_handle));
 
     // Init oled
-    i2c_master_transmit(i2c_dev_handle, oled_INIT_CMD, sizeof(oled_INIT_CMD), I2C_TICKS_TO_WAIT);
+    i2c_master_transmit(i2c_dev_handle, OLED_INIT_CMD, sizeof(OLED_INIT_CMD), I2C_TICKS_TO_WAIT);
     
 }
 
@@ -158,10 +156,10 @@ void oled_set_position(uint8_t x, uint8_t y)
     uint8_t oled_buffer[4] = {0};
     uint8_t buffer_position = 0;
 
-    oled_buffer[buffer_position++] = oled_CMD_MODE;
-    oled_buffer[buffer_position++] = oled_PAGE | y;
+    oled_buffer[buffer_position++] = OLED_CMD_MODE;
+    oled_buffer[buffer_position++] = OLED_PAGE | y;
     oled_buffer[buffer_position++] = x & 0x0F;
-    oled_buffer[buffer_position++] = oled_COLUMN_HIGH | (x >> 4);
+    oled_buffer[buffer_position++] = OLED_COLUMN_HIGH | (x >> 4);
 
     i2c_master_transmit(i2c_dev_handle, oled_buffer, buffer_position, I2C_TICKS_TO_WAIT);
 }
@@ -175,18 +173,18 @@ void oled_set_position(uint8_t x, uint8_t y)
  */
 static void oled_flush_page(uint8_t page)
 {
-    if(page >= oled_NUM_PAGES) return;
+    if(page >= OLED_NUM_PAGES) return;
 
-    uint8_t oled_buffer[oled_WIDTH + 1] = {0};
+    uint8_t oled_buffer[OLED_WIDTH + 1] = {0};
 
-    oled_buffer[0] = oled_DAT_MODE;
+    oled_buffer[0] = OLED_DAT_MODE;
 
-    for(uint8_t i = 1; i<(oled_WIDTH + 1); i++)
+    for(uint8_t i = 1; i<(OLED_WIDTH + 1); i++)
     {
         oled_buffer[i] = oled_buf[page][i-1];
     }
 
-    i2c_master_transmit(i2c_dev_handle, oled_buffer, (oled_WIDTH + 1), I2C_TICKS_TO_WAIT);
+    i2c_master_transmit(i2c_dev_handle, oled_buffer, (OLED_WIDTH + 1), I2C_TICKS_TO_WAIT);
 }
 
 /**
@@ -198,7 +196,7 @@ static void oled_flush_page(uint8_t page)
  */
 void oled_flush(void)
 {
-  for (uint8_t p = 0; p < oled_NUM_PAGES; p++)
+  for (uint8_t p = 0; p < OLED_NUM_PAGES; p++)
   {
     oled_flush_page(p);
   }
@@ -240,7 +238,7 @@ void oled_clear(void)
  */
 void oled_set_pixel(int16_t x, int16_t y, uint8_t color)
 {
-  if (x < 0 || x >= oled_WIDTH || y < 0 || y >= oled_HEIGHT)
+  if (x < 0 || x >= OLED_WIDTH || y < 0 || y >= OLED_HEIGHT)
     return;
   uint8_t page = y >> 3;  // y / 8
   uint8_t bit = y & 0x07; // y % 8
