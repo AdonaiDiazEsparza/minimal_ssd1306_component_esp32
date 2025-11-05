@@ -22,6 +22,9 @@ void oled_draw_char6x8(uint8_t x, uint8_t y, char c);
 void oled_print_6x8(uint8_t x, uint8_t y, const char *text);
 void oled_draw_char5x8(uint8_t x, uint8_t y, char c);
 void oled_print_5x8(uint8_t x, uint8_t y, const char *text);
+void oled_draw_hline(uint8_t x, uint8_t y, uint8_t length, uint8_t color);
+void oled_draw_vline(uint8_t x, uint8_t y, uint8_t length, uint8_t color);
+void oled_draw_rect(uint8_t x, uint8_t y, uint8_t width, uint8_t height, uint8_t color);
 
 #ifdef __cplusplus
 extern C }

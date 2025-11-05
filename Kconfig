@@ -1,62 +1,88 @@
 menu "Minimal Oled Configuration"
+    choice OLED_CHIP_TYPE
+        prompt "OLED Chip Type"
+        default OLED_SSD1306
+        help
+            Select the OLED controller chip type.
 
-    choice RESOLUTION
-		prompt "Panel resolution"
-		default RESOLUTION_128X32 if BOARD_BADGE
-		default RESOLUTION_128X64 if BOARD_MININO
-		help
-			Select Panel resolution.
-		config RESOLUTION_128X32
-			bool "128x32 Panel"
-			help
-				Panel is 128x32.
-		config RESOLUTION_128X64
-			bool "128x64 Panel"
-			help
-				Panel is 128x64.
-	endchoice
+        config OLED_SSD1306
+            bool "SSD1306"
+            help
+                SSD1306 OLED controller (supports 128x64 and 128x32).
 
-	choice I2C_PORT
-		depends on I2C_INTERFACE
-		prompt "I2C port that controls this bus"
-		default I2C_PORT_0
-		help
-			Select I2C port that controls this bus.
-		config I2C_PORT_0
-			bool "I2C_PORT_0"
-			help
-				Use I2C_PORT_0.
-		config I2C_PORT_1
-			depends on IDF_TARGET_ESP32 || IDF_TARGET_ESP32S2 || IDF_TARGET_ESP32S3
-			bool "I2C_PORT_1"
-			help
-				Use I2C_PORT_1
-	endchoice
+        config OLED_SH1106
+            bool "SH1106"
+            help
+                SH1106 OLED controller (supports 128x64 only).
+    endchoice
 
-	config SCL_GPIO
-		int "SCL GPIO number"
-		default 22 if IDF_TARGET_ESP32
-		default 12 if IDF_TARGET_ESP32S2
-		default 12 if IDF_TARGET_ESP32S3
-		default 7 if IDF_TARGET_ESP32C6
-		default 9 if IDF_TARGET_ESP32C3
-		default  6 # others
-		help
-			GPIO number (IOxx) to I2C SCL.
-			Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to I2C.
-			GPIOs 35-39 are input-only so cannot be used as outputs.
+    config CHIP_SH1106
+        bool
+        default y if OLED_SH1106
+        default n if OLED_SSD1306
+        help
+            Internal config flag for SH1106 chip.
 
-	config SDA_GPIO
-		int "SDA GPIO number"
-		default 21 if IDF_TARGET_ESP32
-		default 11 if IDF_TARGET_ESP32S2
-		default 11 if IDF_TARGET_ESP32S3
-		default 6 if IDF_TARGET_ESP32C6
-		default 8 if IDF_TARGET_ESP32C3
-		default  5 # others
-		help
-			GPIO number (IOxx) to I2C SDA.
-			Some GPIOs are used for other purposes (flash connections, etc.) and cannot be used to I2C.
-			GPIOs 35-39 are input-only so cannot be used as outputs.
+    choice OLED_RESOLUTION
+        prompt "OLED Resolution"
+        default OLED_128X64 if OLED_SH1106
+        default OLED_128X64 if OLED_SSD1306
+        help
+            Select the resolution of the OLED display.
+            Note: SH1106 only supports 128x64.
+
+        config OLED_128X64
+            bool "128x64 pixels"
+            help
+                Standard 128x64 OLED display.
+
+        config OLED_128X32
+            bool "128x32 pixels"
+            depends on OLED_SSD1306
+            help
+                Standard 128x32 OLED display (SSD1306 only).
+    endchoice
+
+    config RESOLUTION_128X64
+        bool
+        default y if OLED_128X64
+        default n if OLED_128X32
+        help
+            Internal config flag for 128x64 resolution.
+
+    menu "I2C Configuration"
+        choice I2C_PORT_SELECTION
+            prompt "I2C Port"
+            default I2C_PORT_0
+            help
+                Select which I2C port to use for the OLED display.
+
+            config I2C_PORT_0
+                bool "I2C Port 0"
+                help
+                    Use I2C port 0 for OLED communication.
+
+            config I2C_PORT_1
+                bool "I2C Port 1"
+                help
+                    Use I2C port 1 for OLED communication.
+        endchoice
+
+        config SCL_GPIO
+            int "SCL GPIO Number"
+            default 7
+            range 0 46
+            help
+                GPIO number for I2C SCL (Clock) line.
+                For ESP32-C6, GPIO range is 0-46.
+
+        config SDA_GPIO
+            int "SDA GPIO Number"
+            default 6
+            range 0 46
+            help
+                GPIO number for I2C SDA (Data) line.
+                For ESP32-C6, GPIO range is 0-46.
+    endmenu
 
 endmenu
